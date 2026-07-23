@@ -1,7 +1,7 @@
 import conf from "../conf/conf";
 import { Client, ID, Databases, Storage, Query } from "appwrite";
 
-export class Service {
+export class AppwriteService {
     client = new Client();
     databases;
     storage;
@@ -81,15 +81,15 @@ export class Service {
         }
     }
 
-    async listPosts() {
+    async getPosts(queries = [Query.equal("status", "active")]) {
         try {
             return await this.databases.listDocuments({
                 databaseId: conf.appwriteDatabaseId,
                 collectionId: conf.appwriteCollectionId,
-                queries: [Query.equal("status", "active")]
+                queries
             });
         } catch (error) {
-            console.log("Appwrite service :: listPost :: error", error);
+            console.log("Appwrite service :: getPosts :: error", error);
             return false;
         }
     }
@@ -130,6 +130,6 @@ export class Service {
     }
 }
 
-const service = new Service();
+const appwriteService = new AppwriteService();
 
-export default service
+export default appwriteService
